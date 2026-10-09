@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>For Chuii Muii 🎀</title>
+
+<style>
+*{box-sizing:border-box}
+body{
+ margin:0;min-height:100vh;
+ font-family:Arial,sans-serif;
+ text-align:center;color:#70446e;
+ background:linear-gradient(135deg,#ffe0f0,#e5d9ff,#fff1f5);
+ overflow-x:hidden
+}
+main{max-width:600px;margin:auto;padding:22px 16px 45px}
+h1{font-size:2.25rem;color:#c45c9a}
+h2{color:#a65eac}
+p{line-height:1.7}
+.card{
+ background:#ffffffd9;border-radius:24px;
+ padding:24px 18px;margin:18px 0;
+ box-shadow:0 8px 25px #b98bb52b
+}
+button{
+ border:0;border-radius:30px;padding:14px 19px;
+ margin:6px;background:#e9a6d1;color:#66375e;
+ font-size:15px;font-weight:bold;cursor:pointer
+}
+button:active{transform:scale(.97)}
+.hidden{display:none!important}
+.gifts{
+ display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px
+}
+.gift{background:#fff0fb;border:1px solid #efc7e8;padding:17px 6px}
+.emoji{font-size:55px}
+.note{
+ background:#fff9f5;padding:20px;border-radius:17px;
+ line-height:1.9;white-space:pre-line
+}
+.heart{position:fixed;top:-30px;pointer-events:none;
+ animation:fall 5s linear forwards;z-index:5}
+@keyframes fall{to{transform:translateY(110vh) rotate(360deg);opacity:0}}
+@keyframes appear{from{opacity:0;transform:translateY(12px)}
+ to{opacity:1;transform:translateY(0)}}
+.scene{animation:appear .6s ease}
+</style>
+</head>
+
+<body>
+<main>
+<div id="welcome" class="card scene">
+ <div class="emoji">🎀🌷✨</div>
+ <p>A LITTLE SURPRISE MADE JUST FOR YOU</p>
+ <h1>Hey, Chuii Muiii! 💗</h1>
+ <p>Yes, you, Saloni! Someone made a tiny birthday universe just for you.</p>
+ <p>Are you ready for some magic? 🥹</p>
+ <button onclick="start()">OPEN YOUR SURPRISE 🎁</button>
+</div>
+
+<div id="choose" class="card hidden scene">
+ <div class="emoji">🎁</div>
+ <h1>Choose Your Gift</h1>
+ <p>Five little surprises, made with lots of care. 💕</p>
+ <div class="gifts" id="giftGrid"></div>
+ <button onclick="cake()">GO TO YOUR CAKE 🎂</button>
+</div>
+
+<div id="giftPage" class="card hidden scene">
+ <div id="giftEmoji" class="emoji">🎀</div>
+ <h2 id="giftTitle"></h2>
+ <div id="giftText" class="note"></div>
+ <button onclick="show('choose')">← BACK TO GIFTS</button>
+ <button onclick="cake()">NEXT: BIRTHDAY CAKE 🎂</button>
+</div>
+
+<div id="cakePage" class="card hidden scene">
+ <div class="emoji" id="cakeEmoji">🎂</div>
+ <h1>Make a Wish, Saloni! ✨</h1>
+ <p id="cakeHint">Tap the button to blow out your candles!</p>
+ <button onclick="blow()">BLOW OUT THE CANDLES 🕯️</button>
+ <div id="wish" class="note hidden">
+ May your days be filled with happiness, your heart with peace,
+ and your life with beautiful memories. You deserve so many reasons to smile! 💗
+ </div>
+ <br><button onclick="show('finalPage')">ONE LAST SURPRISE 💌</button>
+</div>
+
+<div id="finalPage" class="card hidden scene">
+ <div class="emoji">💌🌸</div>
+ <h1>For My Chuii Muiii 💗</h1>
+ <div class="note">Dear Saloni,
+
+Some people enter our lives and make ordinary moments feel a little more special. I'm genuinely glad I got to know you.
+
+You are one of the most special people in my life, and I hope you never forget that. Maybe the best part of knowing you is simply having you in my life. ❤️
+
+I hope this new year of your life brings you laughter, lovely memories, peaceful days, and all the happiness your heart deserves.
+
+Keep being your adorable self, Chuii Muiii! 🌷
+
+Happy Birthday, Saloni! 🎂🎀
+
+— From someone who cares about you 💕</div>
+ <p style="font-size:28px">💗 🦋 💗</p>
+ <button onclick="restart()">RELIVE THE MAGIC ↻</button>
+</div>
+
+<p>Made with birthday magic, just for Saloni. 🌸</p>
+</main>
+
+<script>
+const gifts=[
+["🎀","A Sweet Wish","Happy Birthday, Chuii Muiii! 💗 May your day be as lovely as your heart. You deserve all the happiness in the world!"],
+["🧸","A Virtual Hug","Sending you the biggest virtual hug! 🫂 Never forget that you matter, you are appreciated, and you deserve good things."],
+["🌷","Our Friendship","I'm genuinely glad our paths crossed, Saloni. Here's to more laughter, silly moments, and beautiful memories together!"],
+["💌","A Little Letter","Dear Chuii Muiii, words aren't always enough, but I hope you know that your presence means a lot. Keep smiling, always. 🌸"],
+["👑","The Special Gift","Today's all about YOU! Keep shining, keep dreaming, and never forget how special you are. Happy Birthday! ✨"]
+];
+
+function show(id){
+ document.querySelectorAll('main>div[id]').forEach(e=>e.classList.add('hidden'));
+ const el=document.getElementById(id);
+ el.classList.remove('hidden');
+ el.classList.remove('scene');void el.offsetWidth;el.classList.add('scene');
+ window.scrollTo({top:0,behavior:'smooth'});
+}
+function start(){
+ show('choose');
+ const grid=document.getElementById('giftGrid');
+ if(grid.children.length)return;
+ gifts.forEach((g,i)=>{
+  const b=document.createElement('button');
+  b.className='gift';
+  b.innerHTML='<span style="font-size:35px">'+g[0]+'</span><br>Gift '+(i+1)+'<br>'+g[1];
+  b.onclick=()=>openGift(i);
+  grid.appendChild(b);
+ });
+}
+function openGift(i){
+ document.getElementById('giftEmoji').textContent=gifts[i][0];
+ document.getElementById('giftTitle').textContent=gifts[i][1];
+ document.getElementById('giftText').textContent=gifts[i][2];
+ show('giftPage');
+}
+function cake(){show('cakePage')}
+function blow(){
+ document.getElementById('cakeEmoji').textContent='🎂✨🎉';
+ document.getElementById('cakeHint').textContent='Wish sent into the universe! 💫';
+ document.getElementById('wish').classList.remove('hidden');
+ for(let i=0;i<30;i++){
+  const h=document.createElement('span');
+  h.className='heart';
+  h.textContent=['💗','🌸','✨','💕'][i%4];
+  h.style.left=Math.random()*100+'vw';
+  h.style.animationDelay=Math.random()*2+'s';
+  document.body.appendChild(h);
+  setTimeout(()=>h.remove(),7000);
+ }
+}
+function restart(){
+ document.getElementById('cakeEmoji').textContent='🎂';
+ document.getElementById('cakeHint').textContent='Tap the button to blow out your candles!';
+ document.getElementById('wish').classList.add('hidden');
+ show('welcome');
+}
+</script>
+</body>
+</html>
